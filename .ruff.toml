@@ -119,7 +119,6 @@ inline-quotes = "single"
 "__init__.py" = ["F401"]  # Ignore unused imports in __init__.py
 "*_test.py" = ["D", "ANN"]  # Ignore docstring and annotation issues in test files
 "test_*.py" = ["D", "ANN"]  # Ignore docstring and annotation issues in test files
-"types.py" = ["D", "E501", "N815"]  # Ignore docstring and annotation issues in types.py
 
 [format]
 docstring-code-format = true
