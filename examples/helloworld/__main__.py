@@ -39,30 +39,31 @@ if __name__ == '__main__':
         defaultOutputModes=['text'],
         capabilities=AgentCapabilities(streaming=True),
         skills=[skill],  # Only the basic skill for the public card
-        supportsAuthenticatedExtendedCard=True,
+        # supportsAuthenticatedExtendedCard=True,
     )
 
     # This will be the authenticated extended agent card
     # It includes the additional 'extended_skill'
-    specific_extended_agent_card = public_agent_card.model_copy(
-        update={
-            'name': 'Hello World Agent - Extended Edition', # Different name for clarity
-            'description': 'The full-featured hello world agent for authenticated users.',
-            'version': '1.0.1', # Could even be a different version
-            # Capabilities and other fields like url, defaultInputModes, defaultOutputModes,
-            # supportsAuthenticatedExtendedCard are inherited from public_agent_card unless specified here.
-            'skills': [skill, extended_skill],  # Both skills for the extended card
-        }
-    )
+    # specific_extended_agent_card = public_agent_card.model_copy(
+    #     update={
+    #         'name': 'Hello World Agent - Extended Edition', # Different name for clarity
+    #         'description': 'The full-featured hello world agent for authenticated users.',
+    #         'version': '1.0.1', # Could even be a different version
+    #         # Capabilities and other fields like url, defaultInputModes, defaultOutputModes,
+    #         # supportsAuthenticatedExtendedCard are inherited from public_agent_card unless specified here.
+    #         'skills': [skill, extended_skill],  # Both skills for the extended card
+    #     }
+    # )
 
     request_handler = DefaultRequestHandler(
         agent_executor=HelloWorldAgentExecutor(),
         task_store=InMemoryTaskStore(),
     )
 
-    server = A2AStarletteApplication(agent_card=public_agent_card,
-                                     http_handler=request_handler,
-                                     extended_agent_card=specific_extended_agent_card)
+    server = A2AStarletteApplication(
+        agent_card=public_agent_card, http_handler=request_handler
+    )
+    #  extended_agent_card=specific_extended_agent_card)
     import uvicorn
 
     uvicorn.run(server.build(), host='0.0.0.0', port=9999)
