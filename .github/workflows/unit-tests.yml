@@ -14,11 +14,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    if: github.repository == 'google/a2a-python'
+    if: github.repository == 'google-a2a/a2a-python'
 
     strategy:
       matrix:
-        python-version: ["3.13"]
+        python-version: ["3.10", "3.13"]
 
     steps:
       - name: Checkout code

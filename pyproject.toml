@@ -5,7 +5,7 @@ description = "A2A Python SDK"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Google LLC", email = "googleapis-packages@google.com" }]
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 keywords = ["A2A", "A2A SDK", "A2A Protocol", "Agent2Agent"]
 dependencies = [
     "httpx>=0.28.1",
@@ -15,13 +15,15 @@ dependencies = [
     "pydantic>=2.11.3",
     "sse-starlette>=2.3.3",
     "starlette>=0.46.2",
-    "typing-extensions>=4.13.2",
 ]
 
 classifiers = [
   "Intended Audience :: Developers",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
@@ -30,8 +32,8 @@ classifiers = [
 
 [project.urls]
 homepage = "https://google.github.io/A2A/"
-repository = "https://github.com/google/a2a-python"
-changelog = "https://github.com/google/a2a-python/blob/main/CHANGELOG.md"
+repository = "https://github.com/google-a2a/a2a-python"
+changelog = "https://github.com/google-a2a/a2a-python/blob/main/CHANGELOG.md"
 documentation = "https://google.github.io/A2A/"
 
 [tool.hatch.build.targets.wheel]
@@ -59,14 +61,6 @@ exclude = [
 [tool.uv-dynamic-versioning]
 vcs = "git"
 style = "pep440"
-
-[tool.uv.workspace]
-members = [
-    "examples/langgraph",
-    "examples/helloworld",
-    "examples/google_adk/birthday_planner",
-    "examples/google_adk/calendar_agent",
-]
 
 [dependency-groups]
 dev = [

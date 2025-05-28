@@ -1,35 +1,20 @@
 import asyncio
-
 from typing import Any
 from unittest import mock
 
 import pytest
-
 from starlette.responses import JSONResponse
 from starlette.routing import Route
 from starlette.testclient import TestClient
 
 from a2a.server.apps.starlette_app import A2AStarletteApplication
-from a2a.types import (
-    AgentCapabilities,
-    AgentCard,
-    Artifact,
-    DataPart,
-    InternalError,
-    InvalidRequestError,
-    JSONParseError,
-    Part,
-    PushNotificationConfig,
-    Task,
-    TaskArtifactUpdateEvent,
-    TaskPushNotificationConfig,
-    TaskState,
-    TaskStatus,
-    TextPart,
-    UnsupportedOperationError,
-)
+from a2a.types import (AgentCapabilities, AgentCard, Artifact, DataPart,
+                       InternalError, InvalidRequestError, JSONParseError,
+                       Part, PushNotificationConfig, Task,
+                       TaskArtifactUpdateEvent, TaskPushNotificationConfig,
+                       TaskState, TaskStatus, TextPart,
+                       UnsupportedOperationError)
 from a2a.utils.errors import MethodNotImplementedError
-
 
 # === TEST SETUP ===
 
@@ -58,6 +43,20 @@ MINIMAL_AGENT_CARD: dict[str, Any] = {
     'version': '1.0',
 }
 
+EXTENDED_AGENT_CARD_DATA: dict[str, Any] = {
+    **MINIMAL_AGENT_CARD,
+    'name': 'TestAgent Extended',
+    'description': 'Test Agent with more details',
+    'skills': [
+        MINIMAL_AGENT_SKILL,
+        {
+            'id': 'skill-extended',
+            'name': 'Extended Skill',
+            'description': 'Does more things',
+            'tags': ['extended'],
+        },
+    ],
+}
 TEXT_PART_DATA: dict[str, Any] = {'kind': 'text', 'text': 'Hello'}
 
 DATA_PART_DATA: dict[str, Any] = {'kind': 'data', 'data': {'key': 'value'}}
@@ -81,6 +80,11 @@ FULL_TASK_STATUS: dict[str, Any] = {
 @pytest.fixture
 def agent_card():
     return AgentCard(**MINIMAL_AGENT_CARD)
+
+
+@pytest.fixture
+def extended_agent_card_fixture():
+    return AgentCard(**EXTENDED_AGENT_CARD_DATA)
 
 
 @pytest.fixture
@@ -118,6 +122,45 @@ def test_agent_card_endpoint(client: TestClient, agent_card: AgentCard):
     assert data['name'] == agent_card.name
     assert data['version'] == agent_card.version
     assert 'streaming' in data['capabilities']
+
+
+def test_authenticated_extended_agent_card_endpoint_not_supported(
+    agent_card: AgentCard, handler: mock.AsyncMock
+):
+    """Test extended card endpoint returns 404 if not supported by main card."""
+    # Ensure supportsAuthenticatedExtendedCard is False or None
+    agent_card.supportsAuthenticatedExtendedCard = False
+    app_instance = A2AStarletteApplication(agent_card, handler)
+    # The route should not even be added if supportsAuthenticatedExtendedCard is false
+    # So, building the app and trying to hit it should result in 404 from Starlette itself
+    client = TestClient(app_instance.build())
+    response = client.get('/agent/authenticatedExtendedCard')
+    assert response.status_code == 404 # Starlette's default for no route
+
+
+def test_authenticated_extended_agent_card_endpoint_supported_with_specific_extended_card(
+    agent_card: AgentCard,
+    extended_agent_card_fixture: AgentCard,
+    handler: mock.AsyncMock,
+):
+    """Test extended card endpoint returns the specific extended card when provided."""
+    agent_card.supportsAuthenticatedExtendedCard = True # Main card must support it
+    app_instance = A2AStarletteApplication(
+        agent_card, handler, extended_agent_card=extended_agent_card_fixture
+    )
+    client = TestClient(app_instance.build())
+
+    response = client.get('/agent/authenticatedExtendedCard')
+    assert response.status_code == 200
+    data = response.json()
+    # Verify it's the extended card's data
+    assert data['name'] == extended_agent_card_fixture.name
+    assert data['version'] == extended_agent_card_fixture.version
+    assert len(data['skills']) == len(extended_agent_card_fixture.skills)
+    assert any(
+        skill['id'] == 'skill-extended' for skill in data['skills']
+    ), "Extended skill not found in served card"
+
 
 
 def test_agent_card_custom_url(
@@ -230,7 +273,7 @@ def test_cancel_task(client: TestClient, handler: mock.AsyncMock):
     """Test cancelling a task."""
     # Setup mock response
     task_status = TaskStatus(**MINIMAL_TASK_STATUS)
-    task_status.state =  TaskState.canceled  # 'cancelled' #
+    task_status.state = TaskState.canceled  # 'cancelled' #
     task = Task(
         id='task1', contextId='ctx1', state='cancelled', status=task_status
     )
@@ -543,7 +586,7 @@ async def test_task_resubscription(
 
 def test_invalid_json(client: TestClient):
     """Test handling invalid JSON."""
-    response = client.post('/', data='This is not JSON')
+    response = client.post('/', content=b'This is not JSON')  # Use bytes
     assert response.status_code == 200  # JSON-RPC errors still return 200
     data = response.json()
     assert 'error' in data
