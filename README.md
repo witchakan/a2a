@@ -1,4 +1,4 @@
-# A2A Python SDK
+# A2A Python SDK 🐍
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 ![PyPI - Version](https://img.shields.io/pypi/v/a2a-sdk)
@@ -10,41 +10,41 @@
    <h2 align="center">
    <img src="https://raw.githubusercontent.com/google-a2a/A2A/refs/heads/main/docs/assets/a2a-logo-black.svg" width="256" alt="A2A Logo"/>
    </h2>
-   <h3 align="center">A Python library that helps run agentic applications as A2AServers following the <a href="https://google.github.io/A2A">Agent2Agent (A2A) Protocol</a>.</h3>
+   <h3 align="center">ไลบรารี Python ที่ช่วยให้รันแอปพลิเคชัน Agentic ในรูปแบบ A2AServers ตาม <a href="https://google.github.io/A2A">Agent2Agent (A2A) Protocol</a> 🚀</h3>
 </html>
 
 <!-- markdownlint-enable no-inline-html -->
 
-## Installation
+## การติดตั้ง 🛠️
 
-You can install the A2A SDK using either `uv` or `pip`.
+คุณสามารถติดตั้ง A2A SDK โดยใช้ `uv` หรือ `pip`
 
-## Prerequisites
+## สิ่งที่ต้องมีก่อนติดตั้ง 📋
 
 - Python 3.10+
-- `uv` (optional, but recommended) or `pip`
+- `uv` (ทางเลือก แต่แนะนำ) หรือ `pip`
 
-### Using `uv`
+### การใช้ `uv`
 
-When you're working within a uv project or a virtual environment managed by uv, the preferred way to add packages is using uv add.
+เมื่อคุณทำงานในโปรเจกต์ uv หรือสภาพแวดล้อมเสมือนที่จัดการโดย uv วิธีที่แนะนำในการเพิ่มแพ็คเกจคือการใช้ uv add
 
 ```bash
 uv add a2a-sdk
 ```
 
-### Using `pip`
+### การใช้ `pip`
 
-If you prefer to use pip, the standard Python package installer, you can install `a2a-sdk` as follows
+หากคุณต้องการใช้ pip ซึ่งเป็นตัวติดตั้งแพ็คเกจมาตรฐานของ Python คุณสามารถติดตั้ง `a2a-sdk` ได้ดังนี้
 
 ```bash
 pip install a2a-sdk
 ```
 
-## Examples
+## ตัวอย่างการใช้งาน 📝
 
-### [Helloworld Example](https://github.com/google-a2a/a2a-samples/tree/main/samples/python/agents/helloworld)
+### [ตัวอย่าง Helloworld](https://github.com/google-a2a/a2a-samples/tree/main/samples/python/agents/helloworld)
 
-1. Run Remote Agent
+1. รัน Remote Agent
 
    ```bash
    git clone https://github.com/google-a2a/a2a-samples.git
@@ -52,19 +52,19 @@ pip install a2a-sdk
    uv run .
    ```
 
-2. In another terminal, run the client
+2. ในอีกเทอร์มินัลหนึ่ง รัน client
 
    ```bash
    cd a2a-samples/samples/python/agents/helloworld
    uv run test_client.py
    ```
 
-You can also find more Python samples [here](https://github.com/google-a2a/a2a-samples/tree/main/samples/python) and JavaScript samples [here](https://github.com/google-a2a/a2a-samples/tree/main/samples/js).
+คุณยังสามารถค้นหาตัวอย่าง Python เพิ่มเติมได้ [ที่นี่](https://github.com/google-a2a/a2a-samples/tree/main/samples/python) และตัวอย่าง JavaScript ได้ [ที่นี่](https://github.com/google-a2a/a2a-samples/tree/main/samples/js)
 
-## License
+## ใบอนุญาต 📄
 
-This project is licensed under the terms of the [Apache 2.0 License](https://raw.githubusercontent.com/google-a2a/a2a-python/refs/heads/main/LICENSE).
+โปรเจกต์นี้ได้รับอนุญาตภายใต้เงื่อนไขของ [Apache 2.0 License](https://raw.githubusercontent.com/google-a2a/a2a-python/refs/heads/main/LICENSE)
 
-## Contributing
+## การมีส่วนร่วม 🤝
 
-See [CONTRIBUTING.md](https://github.com/google-a2a/a2a-python/blob/main/CONTRIBUTING.md) for contribution guidelines.
+ดู [CONTRIBUTING.md](https://github.com/google-a2a/a2a-python/blob/main/CONTRIBUTING.md) สำหรับแนวทางการมีส่วนร่วม
